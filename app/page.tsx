@@ -15,19 +15,6 @@ export default function Home(): JSX.Element {
   const beginRef = useRef<HTMLButtonElement>(null);
   const [loading, setLoading] = useState(true);
 
-  /* Page Loading */
-  useEffect(() => {
-    const handlePageLoad = () => {
-      setTimeout(() => {
-        setLoading(false);
-      }, 7000);
-    };
-
-    window.addEventListener("load", handlePageLoad);
-
-    return () => window.removeEventListener("load", handlePageLoad);
-  }, []);
-
   /* Showing Behavior */
   useEffect(() => {
     const preloaderShow = sessionStorage.getItem("preloaderShown");
@@ -65,7 +52,7 @@ export default function Home(): JSX.Element {
         { x: 50, opacity: 0, ease: "power2.out" },
         { x: 20, opacity: 1 }
       );
-      gsap.fromTo("#square", { opacity: 0 }, { opacity: 1, duration: 1 });
+      gsap.fromTo("#square-right, #square-left", { opacity: 0 }, { opacity: 1, duration: 1 });
       gsap.fromTo(
         ".experience__btn--wrapper",
         { opacity: 0 },
@@ -157,7 +144,7 @@ export default function Home(): JSX.Element {
               </div>
             </div>
             <div className="index__left--link-wrapper">
-              <span id="square" className="dotted__square"></span>
+              <span id="square-left" className="dotted__square"></span>
               <div className="dotted__square--link-wrapper">
                 <button disabled>
                   <span className="btn__icon">
@@ -185,7 +172,7 @@ export default function Home(): JSX.Element {
               </div>
             </div>
             <div className="index__right--link-wrapper">
-              <span id="square" className="dotted__square2"></span>
+              <span id="square-right" className="dotted__square"></span>
               <div className="dotted__square--link-wrapper2">
                 <Link
                   onMouseEnter={handleAnimationsIn}

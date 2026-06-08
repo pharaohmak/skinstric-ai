@@ -8,7 +8,7 @@ import Button from "../components/Button";
 import { useJsApiLoader, Autocomplete} from "@react-google-maps/api";
 import Blackbox from "../components/Blackbox";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// @ts-ignore: allow side-effect CSS import without type declarations
 import { useRouter } from "next/navigation";
 
 interface LatLng {
@@ -48,17 +48,13 @@ const Introduction: React.FC = () => {
   const proceedRef = useRef<HTMLAnchorElement | null>(null);
   const inputGoogleRef = useRef<google.maps.places.Autocomplete | null>(null);
 
-  const LoadGoogleMapsApi = () => useJsApiLoader({
-    googleMapsApiKey: "AIzaSyCEp9gXJuEtRCdoAuqSu2gIpD032T8oaaI",
-    libraries: ["places"]
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_PLACES_API_KEY!,
+    libraries: ["places"],
   });
-
-  const { isLoaded } = LoadGoogleMapsApi();
 
   const handleBack = () => {
     setPhase1(true);
-    setShowLabel(false);
-    setProceed(true);
   };
 
   const handleProceed = () => {
@@ -67,10 +63,6 @@ const Introduction: React.FC = () => {
     setProceed(false);
     setPhase1(false);
   };
-
-  useEffect(() => {
-    console.log(infoArr, name);
-  }, [infoArr]);
 
   const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value || "");
@@ -132,6 +124,9 @@ const Introduction: React.FC = () => {
   const handlePlaceChanged = () => {
     setBottomText("");
     localStorage.setItem("name", name);
+    localStorage.setItem("location", location);
+    localStorage.setItem("latLng", JSON.stringify(latLng));
+
 
     if (inputGoogleRef.current) {
       const place = inputGoogleRef.current.getPlace();
